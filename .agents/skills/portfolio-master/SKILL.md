@@ -27,6 +27,9 @@ Core architectural contract and self-updating skill for `lab-portfolio` and
    - Projects categorized under `capstone`, `freelancing`, and `hobbie` with backend sorting.
    - LinkedIn posts controlled by explicit `featuredOnSite` toggle (`PATCH /api/linkedin/posts/:id/toggle`).
    - Resume available as mobile PWA (`/resume`) and validated PDF upload (`/api/resume/upload`).
+5. **Dual Mobile Editions**:
+   - `owner` (`dev.adhithan.portfolio.admin`, `VITE_APP_EDITION=owner`): full portfolio + Admin CMS (`/admin`) + Bearer `sessionToken` auth + Server URL switcher.
+   - `playstore` (`dev.adhithan.portfolio`, `VITE_APP_EDITION=playstore`): strictly public UI with `/admin` tree-shaken out of compiled JS and consolidated `GET /api/portfolio` live sync.
 
 ## Workflows
 
