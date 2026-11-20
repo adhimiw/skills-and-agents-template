@@ -22,7 +22,7 @@ cat > "$STATE_FILE" <<EOF
 - **Synced At**: \`$UPDATED_AT\`
 - **Package Version**: \`v$VERSION\`
 - **Git Ref**: \`$TAG\`
-- **Frontend**: React 19 + React Router + PWA (\`/\`, \`/resume\`, \`/admin\`)
+- **Frontend**: React 19 + React Router + PWA + Capacitor 8 Android App (\`/\`, \`/resume\`, \`/admin\`)
 - **Backend Models**: $MODELS
 - **Backend Route Modules**: $ROUTES
 - **Integration Test Cases**: $TEST_COUNT
