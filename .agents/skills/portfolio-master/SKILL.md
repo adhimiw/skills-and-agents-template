@@ -33,7 +33,8 @@ Core architectural contract and self-updating skill for `lab-portfolio` and
 
 ## Workflows
 
-- **Verify before shipping**: Run `npm run pipeline` (security hygiene, WCAG contrast, parity, API tests, React build, smoke probe).
+- **Verify before shipping**: Run `npm run pipeline` (6-stage verification: security hygiene, WCAG contrast, parity, API tests, dual `owner` + `playstore` React build & leakage check, 11-route smoke probe, and Playwright `npm run qa`).
+- **QA & Release Skills**: Companion skills installed in `.agents/skills/` include `webapp-testing`, `playwright-skill`, `browser-testing-with-devtools`, `code-review-and-quality`, `security-and-hardening`, `shipping-and-launch`, and `test-driven-development`.
 - **Read current live state**: See `references/project-state.md` (auto-updated by script).
 - **Self-update skill & sync to GitHub**: Run `npm run skills:sync` (or `bash .agents/skills/portfolio-master/scripts/update-and-sync.sh`).
   This refreshes `references/project-state.md` from live models/routes/versions, mirrors updated skills to

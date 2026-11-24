@@ -32,7 +32,7 @@ echo "Updated $STATE_FILE"
 
 # Mirror portfolio-master and updated skills back into skills-and-agents-template
 if [ -d "$TEMPLATE_ROOT/.agents/skills" ]; then
-  rsync -a --delete --exclude '__pycache__' "$PORTFOLIO_ROOT/.agents/skills/" "$TEMPLATE_ROOT/.agents/skills/"
+  rsync -a --delete --exclude '__pycache__' --exclude 'node_modules' "$PORTFOLIO_ROOT/.agents/skills/" "$TEMPLATE_ROOT/.agents/skills/"
   echo "Synced skills to $TEMPLATE_ROOT/.agents/skills/"
 fi
 
