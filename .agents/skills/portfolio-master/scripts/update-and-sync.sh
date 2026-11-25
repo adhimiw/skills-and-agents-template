@@ -13,7 +13,7 @@ VERSION="$(node -p "require('./package.json').version" 2>/dev/null || echo '1.0.
 TAG="$(git describe --tags --always 2>/dev/null || echo "v$VERSION")"
 MODELS="$(ls server/models/*.js 2>/dev/null | xargs -n1 basename | sed 's/\.js$//' | tr '\n' ',' | sed 's/,$//; s/,/, /g')"
 ROUTES="$(ls server/routes/*.js 2>/dev/null | xargs -n1 basename | sed 's/\.js$//' | tr '\n' ',' | sed 's/,$//; s/,/, /g')"
-TEST_COUNT="$(grep -c "test(" server/test/*.js 2>/dev/null || echo '0')"
+TEST_COUNT="$(grep -ch "test(" server/test/*.js 2>/dev/null | awk '{s+=$1} END{print s+0}')"
 UPDATED_AT="$(date -Iseconds)"
 
 cat > "$STATE_FILE" <<EOF
