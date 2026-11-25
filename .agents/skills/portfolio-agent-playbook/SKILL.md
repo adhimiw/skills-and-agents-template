@@ -29,20 +29,26 @@ Operate the agent from `/admin?tab=agent` (**AI Agent**) or `POST /api/agent/com
   - Publish copy directly or pass URL + optional `linkedinText` / uploaded raster image when LinkedIn returns an HTTP `999` login wall.
   - Set `"Sync & feature LinkedIn posts"` to sync `/rest/posts` (using active dynamic `YYYYMM` `LinkedIn-Version`, handling `403 ACCESS_DENIED` when `r_member_social` is unapproved) and toggle `featuredOnSite`.
 - **Live Frontend Sync**: Every mutation bumps `GET /api/portfolio/version` and broadcasts `adhithan_portfolio_sync`, refreshing open `/` tabs without reload.
+- **Public Grounded Visitor Chatbot (`/api/chat`)**: Public SSE endpoint serving `ask_adhithan.sh` (`ProjectChatbot.jsx`) across Owner and Play Store editions, grounded on published MongoDB records with revision-keyed caching and `<untrusted_visitor_query>` isolation.
+- **Backend Autonomous Worker & Agent PRs (`/api/autonomous`)**: Operate via **AI Agent → Autonomous Queue & Policy** (`AutonomousAdmin.jsx`):
+  - GitHub push webhooks (`POST /api/autonomous/webhook`) verify `X-Hub-Signature-256` against Vault `GITHUB_WEBHOOK_SECRET` and deduplicate via `idempotencyKey`.
+  - LinkedIn drafts stage offline (`featuredOnSite: false, draftStatus: 'awaiting_approval'`) until explicitly approved via `POST /api/autonomous/tasks/:id/approve`.
+  - Repository code/docs updates (`type: 'repo-update'`) open Draft PRs strictly on `agent/*` branches inside `repoWritePaths` allowlists with `<= 5` files, `<= 400` diff lines, and daily token budget caps.
 
 ## 3. Inference Engineering & Failure Recovery
 
+- **Priority Lanes & TTFT**: Visitor chat runs in the `interactive` lane (tracking `ttftMs` P50/P95); background autonomous sweeps defer for `35s` whenever interactive traffic is active so workspace RPM quotas serve live visitors first.
 - **Model Cascade**: Defaults to `ministral-14b-latest` -> `codestral-latest` -> `ministral-8b-latest` -> `ministral-3b-latest` -> deterministic README/manifest fallback.
 - **Zero-RPM `429` Handling**: Any model returning `x-ratelimit-limit-req-minute: "0"` trips its in-memory circuit breaker (`300s` cooldown) and cascades immediately; rotating `MISTRAL_API_KEY` or `MISTRAL_MODEL` in Vault resets circuits cleanly (`clearMistralCircuits()`).
-- **Observability**: Inspect **Inference Engineering Observability** in **AI Agent** or `GET /api/agent/metrics` for `P50`/`P90`/`P95`/`P99` latency, KV prefix `cacheHitRatePct`, and `2XX`/`429`/`4XX`/`5XX` counters.
+- **Observability**: Inspect **Inference Engineering Observability** in **AI Agent** or `GET /api/agent/metrics` for `P50`/`P90`/`P95`/`P99` latency, `ttftMs`, KV prefix `cacheHitRatePct`, priority lane timestamps, and `2XX`/`429`/`4XX`/`5XX` counters.
 
 ## 4. Realtime DevOps Verification Gates
 
-- Run strict live integration probe (GitHub OAuth + LinkedIn `/v2/userinfo` & active REST header + Mistral + AI Agent preview):
+- Run strict live integration probe (GitHub OAuth + LinkedIn `/v2/userinfo` & active REST header + Mistral + AI Agent preview + live `/api/chat` stream + `/api/autonomous/status`):
   ```bash
   npm run devops:verify:live
   ```
-- Run the full 7-stage local pipeline (Security Hygiene -> Contrast/Parity -> 35 Unit/Integration/Security Tests -> Dual React + Play Store Leakage Scan -> Production Smoke -> Playwright 9-Tab E2E -> Realtime Live Probe):
+- Run the full 7-stage local pipeline (Security Hygiene -> Contrast/Parity -> 43 Unit/Integration/Security/Chatbot/Autonomous Tests -> Dual React + Play Store Leakage Scan -> Production Smoke -> Playwright E2E -> Realtime Live Probe):
   ```bash
   npm run pipeline
   ```
