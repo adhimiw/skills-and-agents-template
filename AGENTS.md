@@ -1,8 +1,8 @@
 # Project Agent Configuration & Skills Index
 
-Welcome to this website development workspace. This project is configured with a unified suite of elite design, engineering, anti-slop, and accessibility skills.
+Welcome to this unified agent starter workspace. All **500 installed skills sorted across 16 work streams** live in `.agents/skills/` and are indexed by role in [`README.md`](README.md).
 
-Before starting any design, coding, or refactoring task, read the relevant skill instructions and follow the project rules.
+Before starting any design, coding, security, mobile, data, or refactoring task, read the relevant `SKILL.md` instructions and follow the rules in `.agents/rules/`.
 
 ---
 

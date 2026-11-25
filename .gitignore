@@ -8,3 +8,9 @@ dist/
 scratch/
 pictuers and video needed to be converted webpandm/
 *.sqlite
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+*.mp4
